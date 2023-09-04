@@ -76,12 +76,14 @@ function displaying_elements(data) {
             quote.contentEditable = false;
           });
         });
-        delete_button.addEventListener("click", function () {
+        delete_button.addEventListener("click", function (e) {
           if (confirm("Are you sure you want to delete this quote?")) {
             row.remove();
+            const index = arr.indexOf(obj);
+            arr.splice(index, 1);
+            localStorage.setItem("apidata", JSON.stringify(parsed_data));
           }
         });
-        // Remove the corresponding row from the table
       } else if (key == "author") {
         let author = document.createElement("span");
         let cite = document.createElement("cite");
@@ -97,17 +99,3 @@ function displaying_elements(data) {
     return row;
   }
 }
-
-// table.addEventListener("input", function (e) {
-//   const element = e.target;
-//   const rowIndex = element.parentNode.rowIndex - 1;
-//   const columnIndex = element.cellIndex;
-//   const newValue = element.textContent;
-
-//   if (rowIndex >= 0 && columnIndex >= 0) {
-//     arr[rowIndex][Object.keys(arr[rowIndex])[columnIndex]] = newValue;
-//     localStorage.setItem("apidata", JSON.stringify({ quotes: arr }));
-//   }
-// });
-
-//Task completed.
