@@ -48,7 +48,6 @@ loginfields.forEach((loginfield) => {
   logininput.id = loginfield.id;
   logininput.placeholder = loginfield.placeholder;
 
-
   const loginerrorMessage = document.createElement("p");
   loginerrorMessage.textContent = " login Error message";
 
@@ -159,7 +158,7 @@ buttons.forEach((button) => {
 
 const txt4 = document.createElement("p");
 txt4.className = "fullstack_text";
-txt4.innerHTML = "Already have an account?";
+txt4.innerText = "Already have an account?";
 formboxDiv.appendChild(txt4);
 
 const txt5 = document.createElement("a");

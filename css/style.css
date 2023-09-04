@@ -38,7 +38,7 @@
 }
 
 .fullstack_text {
-  margin-left: 90px;
+  margin-left: 150px;
   font-size: 12px;
   font-family: "Montserrat", sans-seri;
   font-weight: bold;
@@ -201,7 +201,7 @@ button:hover {
 
 .left .fullstack_text {
   text-align: left;
-  color: white;
+  color: black;
   position: absolute;
   margin-left: 80px;
   font-family: "Montserrat", sans-seri;

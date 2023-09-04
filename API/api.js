@@ -21,14 +21,13 @@ function displaying_elements(data) {
 
   let table = document.createElement("table");
   table.id = "table";
-  table.className = "table table-striped table-bordered";
+  // table.className = "table table-striped table-bordered";
 
   let x = 0;
   let header = document.createElement("tr");
   for (let i in arr[x]) {
     let heading = document.createElement("th");
     heading.textContent = i;
-    heading.setAttribute("contenteditable", "true");
     header.appendChild(heading);
   }
   table.appendChild(header);
@@ -46,13 +45,43 @@ function displaying_elements(data) {
     let row = document.createElement("tr");
     for (let key in obj) {
       let cell = document.createElement("td");
-      cell.setAttribute("contenteditable", "true");
-
       if (key == "quote") {
+        let quotediv = document.createElement("div");
+        quotediv.className = "quotediv";
+        cell.appendChild(quotediv);
+
         let quote = document.createElement("span");
-        quote.className = "blockquote";
+        quote.className = "";
         quote.textContent = obj[key];
-        cell.appendChild(quote);
+        quotediv.appendChild(quote);
+
+        let button_div = document.createElement("div");
+        button_div.className = "button_div";
+        cell.appendChild(button_div);
+
+        let delete_button = document.createElement("button");
+        delete_button.className = "delete_button";
+        delete_button.textContent = "Delete";
+        button_div.appendChild(delete_button);
+        let edit_button = document.createElement("button");
+        edit_button.className = "edit_button";
+        edit_button.textContent = "Edit";
+        button_div.appendChild(edit_button);
+        edit_button.addEventListener("click", function () {
+          quote.contentEditable = true;
+          quote.focus();
+          quote.addEventListener("blur", function () {
+            obj[key] = this.textContent;
+            localStorage.setItem("apidata", JSON.stringify(parsed_data));
+            quote.contentEditable = false;
+          });
+        });
+        delete_button.addEventListener("click", function () {
+          if (confirm("Are you sure you want to delete this quote?")) {
+            row.remove();
+          }
+        });
+        // Remove the corresponding row from the table
       } else if (key == "author") {
         let author = document.createElement("span");
         let cite = document.createElement("cite");
@@ -67,18 +96,18 @@ function displaying_elements(data) {
     }
     return row;
   }
-
-  table.addEventListener("input", function (e) {
-    const element = e.target;
-    const rowIndex = element.parentNode.rowIndex - 1;
-    const columnIndex = element.cellIndex;
-    const newValue = element.textContent;
-
-    if (rowIndex >= 0 && columnIndex >= 0) {
-      arr[rowIndex][Object.keys(arr[rowIndex])[columnIndex]] = newValue;
-      localStorage.setItem("apidata", JSON.stringify({ quotes: arr }));
-    }
-  });
 }
+
+// table.addEventListener("input", function (e) {
+//   const element = e.target;
+//   const rowIndex = element.parentNode.rowIndex - 1;
+//   const columnIndex = element.cellIndex;
+//   const newValue = element.textContent;
+
+//   if (rowIndex >= 0 && columnIndex >= 0) {
+//     arr[rowIndex][Object.keys(arr[rowIndex])[columnIndex]] = newValue;
+//     localStorage.setItem("apidata", JSON.stringify({ quotes: arr }));
+//   }
+// });
 
 //Task completed.

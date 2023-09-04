@@ -21,6 +21,9 @@ document
 create_account_button.addEventListener("click", (a) => {
   a.preventDefault();
   createaccount_func();
+  txt4.innerText = "Already have an account?";
+  txt5.innerText = "Login";
+  txt4.appendChild(txt5);
 });
 
 function createaccount_func() {
@@ -60,6 +63,10 @@ function createUserAccount(Username, Email, Password) {
     username.value = "";
     password.value = "";
     email.value = "";
+
+    txt4.innerText = "Account created sucessfully!";
+    txt5.innerText = "Login";
+    txt4.appendChild(txt5);
   }
 }
 

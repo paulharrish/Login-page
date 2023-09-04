@@ -6,7 +6,7 @@
 
 #table tr,
 #table td {
-  border: 1px solid #ddd;
+  border: solid 1px grey;
   padding: 8px;
 }
 
@@ -31,4 +31,51 @@
 #table p {
   font-weight: bold;
   color: darkolivegreen;
+}
+
+#table .delete_button {
+  background-color: red;
+  width: 90px;
+  height: 30px;
+  text-align: center;
+  color: white;
+  border-radius: 15px;
+  border: none;
+}
+
+#table .edit_button {
+  background-color: green;
+  width: 90px;
+  height: 30px;
+  text-align: center;
+  color: white;
+  border-radius: 15px;
+  border: none;
+}
+
+#table td:nth-child(2) {
+  display: flex;
+  border: none;
+  align-items: center;
+}
+
+#table span {
+  font-size: 18px;
+  word-wrap: break-word;
+  word-break: normal;
+}
+
+#table .quotediv {
+  width: 88%;
+  height: 100%;
+}
+table .button_div {
+  width: 12%;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+span {
+  padding: 8px 6px ;
 }
