@@ -21,7 +21,6 @@ function displaying_elements(data) {
 
   let table = document.createElement("table");
   table.id = "table";
-  // table.className = "table table-striped table-bordered";
 
   let x = 0;
   let header = document.createElement("tr");
