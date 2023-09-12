@@ -157,7 +157,7 @@ buttons.forEach((button) => {
 });
 
 const txt4 = document.createElement("p");
-txt4.className = "fullstack_text";
+txt4.className = "alredyhaveaccount_text";
 txt4.innerText = "Already have an account?";
 formboxDiv.appendChild(txt4);
 

@@ -1,100 +1,86 @@
-let existing_apidata = localStorage.getItem("apidata");
+const storedData = localStorage.getItem("jsonData");
 
-if (existing_apidata == null) {
-  let req = new XMLHttpRequest();
-
-  req.onload = function () {
-    localStorage.setItem("apidata", this.responseText);
-    let fetched_apidata = localStorage.getItem("apidata");
-    displaying_elements(fetched_apidata);
-  };
-
-  req.open("GET", "https://dummyjson.com/quotes", true);
-  req.send();
+if (storedData) {
+  displayData(JSON.parse(storedData));
 } else {
-  displaying_elements(existing_apidata);
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "https://dummyjson.com/quotes", true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+
+      const data = response.quotes;
+
+      localStorage.setItem("jsonData", JSON.stringify(data));
+
+      displayData(data);
+    }
+  };
+  xhr.send();
 }
 
-function displaying_elements(data) {
-  let parsed_data = JSON.parse(data);
-  let arr = parsed_data.quotes;
+function displayData(data) {
+  console.log(data);
+  const tableBody = document.getElementById("table-body");
 
-  let table = document.createElement("table");
-  table.id = "table";
+  data.forEach((item) => {
+    const row = document.createElement("tr");
+    const idCell = document.createElement("td");
+    idCell.textContent = item.id;
+    const quoteCell = document.createElement("td");
+    quoteCell.textContent = item.quote;
+    const authorCell = document.createElement("td");
+    authorCell.textContent = item.author;
+    const actionsCell = document.createElement("td");
 
-  let x = 0;
-  let header = document.createElement("tr");
-  for (let i in arr[x]) {
-    let heading = document.createElement("th");
-    heading.textContent = i;
-    header.appendChild(heading);
-  }
-  table.appendChild(header);
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.className = "btn btn-danger";
+    const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.className = "btn btn-success";
+    deleteButton.addEventListener("click", () => {
+      row.remove();
+      let index = data.indexOf(item);
+      data.splice(index, 1);
+      localStorage.setItem("jsonData", JSON.stringify(data));
+    });
 
-  for (let obj of arr) {
-    table.appendChild(createrow(obj));
-  }
-
-  let container = document.createElement("div");
-  container.className = "container-fluid";
-  container.appendChild(table);
-  document.body.appendChild(container);
-
-  function createrow(obj) {
-    let row = document.createElement("tr");
-    for (let key in obj) {
-      let cell = document.createElement("td");
-      if (key == "quote") {
-        let quotediv = document.createElement("div");
-        quotediv.className = "quotediv";
-        cell.appendChild(quotediv);
-
-        let quote = document.createElement("span");
-        quote.className = "";
-        quote.textContent = obj[key];
-        quotediv.appendChild(quote);
-
-        let button_div = document.createElement("div");
-        button_div.className = "button_div";
-        cell.appendChild(button_div);
-
-        let delete_button = document.createElement("button");
-        delete_button.className = "delete_button";
-        delete_button.textContent = "Delete";
-        button_div.appendChild(delete_button);
-        let edit_button = document.createElement("button");
-        edit_button.className = "edit_button";
-        edit_button.textContent = "Edit";
-        button_div.appendChild(edit_button);
-        edit_button.addEventListener("click", function () {
-          quote.contentEditable = true;
-          quote.focus();
-          quote.addEventListener("blur", function () {
-            obj[key] = this.textContent;
-            localStorage.setItem("apidata", JSON.stringify(parsed_data));
-            quote.contentEditable = false;
-          });
+    editButton.addEventListener("click", () => {
+      if (editButton.textContent === "Edit") {
+        [quoteCell, authorCell].forEach((cell) => {
+          cell.contentEditable = true;
         });
-        delete_button.addEventListener("click", function (e) {
-          if (confirm("Are you sure you want to delete this quote?")) {
-            row.remove();
-            const index = arr.indexOf(obj);
-            arr.splice(index, 1);
-            localStorage.setItem("apidata", JSON.stringify(parsed_data));
-          }
-        });
-      } else if (key == "author") {
-        let author = document.createElement("span");
-        let cite = document.createElement("cite");
-        cite.textContent = obj[key];
-        author.className = "blockquote-footer ";
-        author.appendChild(cite);
-        cell.appendChild(author);
+        editButton.textContent = "Save";
       } else {
-        cell.textContent = obj[key];
+        [quoteCell, authorCell].forEach((cell) => {
+          cell.contentEditable = false;
+        });
+        item.quote = quoteCell.textContent;
+        item.author = authorCell.textContent;
+        localStorage.setItem("jsonData", JSON.stringify(data));
+        editButton.textContent = "Edit";
       }
-      row.appendChild(cell);
-    }
-    return row;
-  }
+    });
+
+    row.appendChild(idCell);
+    row.appendChild(quoteCell);
+    row.appendChild(authorCell);
+    row.appendChild(actionsCell);
+
+    actionsCell.appendChild(editButton);
+    actionsCell.appendChild(deleteButton);
+
+    tableBody.appendChild(row);
+  });
+  let clearallbtn = document.getElementById("btn_clearall");
+  clearallbtn.addEventListener("click", () => {
+    tableBody.remove();
+    localStorage.removeItem("jsonData");
+  });
+  let logoutbtn = document.getElementById("btn_logout");
+  logoutbtn.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.replace("../html/main.html");
+  });
 }
