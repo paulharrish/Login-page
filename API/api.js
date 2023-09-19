@@ -20,7 +20,6 @@ if (storedData) {
 }
 
 function displayData(data) {
-  console.log(data);
   const tableBody = document.getElementById("table-body");
 
   data.forEach((item) => {
